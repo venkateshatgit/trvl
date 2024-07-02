@@ -8,6 +8,7 @@ import {
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shoppage/shoppage.component';
 import Header from './components/header/header.component';
+import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 
 function App() {
 
@@ -30,8 +31,19 @@ function App() {
         {
           path: '/shop',
           element: <ShopPage />
+        },
+
+        {
+          path: 'sign-in-and-sign-up',
+          element: <SignInAndSignUpPage/>,
         }
-      ]
+      ],
+      errorElement: (
+        <>
+        <Header/>
+        404 Error, Page not found 
+        </>
+      )
     }
     
   ]);
