@@ -9,8 +9,12 @@ import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shoppage/shoppage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import { useState } from 'react';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
 
   //creating router
   // OutLet component replaces the childern element 
@@ -49,9 +53,12 @@ function App() {
   ]);
 
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <RouterProvider router={router} />
+      </div>
+    </Provider>
+
   );
 }
 

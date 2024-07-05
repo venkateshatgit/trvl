@@ -1,12 +1,12 @@
 import React from 'react'
 import './form-input.style.scss'
 
-function FormInput({handelChange, label, ...otherProps}) {
+function FormInput({onChange, label, ...otherProps}) {
   return (
     <div className='group'> 
         <input 
             className='form-input' 
-            onChange={handelChange} 
+            onChange={onChange}
             {...otherProps} 
         />
 
