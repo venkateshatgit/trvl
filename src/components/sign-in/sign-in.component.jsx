@@ -2,31 +2,46 @@ import React from 'react'
 import './sign-in.styles.scss'
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
-import { createUserDocumentFromAuth, signInWithGooglePopup } from '../../utils/firebase.utils';
+import { 
+    auth,
+    createUserDocumentFromAuth, 
+    signInWithGooglePopup, 
+    signInWithGoogleRedirect,
+    signInAuthUserWithEmailAndPassword
+ } from '../../utils/firebase.utils';
+import { getRedirectResult } from 'firebase/auth';
 
 
 function SignIn() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    
     const logGoogleUser = async () => {
-        const {user} = await signInWithGooglePopup();
-        const userDocRef = await createUserDocumentFromAuth(user);
+        try{
+            const {user} = await signInWithGooglePopup();
+            const userDocRef = await createUserDocumentFromAuth(user);
+            console.log(userDocRef)
+        }catch(error){
+            console.log(error.message);
+        }
     }
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
 
-    const handleSubmit = event => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-
+        // console.log(email, password);
+        const response = await signInAuthUserWithEmailAndPassword(email, password);
+        console.log(response);
         setEmail('');
         setPassword('');
     }
 
     return (
         <div className='sign-in'>
-            <h2 className='title'>I already have an account</h2>
+            <h1 className='title'>I already have an account</h1>
             <span>Sign in with your email and password</span>
 
             <form onSubmit={handleSubmit}>
@@ -48,9 +63,12 @@ function SignIn() {
                     required
                 />
                 
-                <div>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between"
+                }}>
                     <CustomButton type='submit'>Sign In</CustomButton>
-                    <CustomButton onClick={logGoogleUser}>Sign in with Google</CustomButton>
+                    <CustomButton buttonType='google-sign-in' onClick={logGoogleUser}>Sign in with Google</CustomButton>
                 </div>
                 
             </form>

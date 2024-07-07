@@ -3,8 +3,10 @@ import './custom-button.styles.scss'
 
 function CustomButton({children, ...otherProps}) {
     return (
-        <button className='custom-button' {...otherProps}>
-            {children}
+        <button className={`custom-button 
+            ${children === "Sign in with Google" ? "google-sign-in": ""}`} 
+            {...otherProps} >
+                {children}
         </button>
     )
 }

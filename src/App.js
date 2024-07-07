@@ -38,7 +38,7 @@ function App() {
         },
 
         {
-          path: 'sign-in-and-sign-up',
+          path: '/auth',
           element: <SignInAndSignUpPage/>,
         }
       ],
@@ -58,7 +58,6 @@ function App() {
         <RouterProvider router={router} />
       </div>
     </Provider>
-
   );
 }
 

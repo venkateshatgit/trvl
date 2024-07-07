@@ -4,7 +4,10 @@ import {
     getAuth, 
     signInWithRedirect, 
     signInWithPopup, 
-    GoogleAuthProvider } 
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
+} 
 from "firebase/auth";
 import {
     getFirestore,
@@ -31,14 +34,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
     prompt: "select_account"
 });
 
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
+
+
+
 
 ///FireStore below
 
@@ -46,8 +53,11 @@ export const db = getFirestore(); //directly points to database inside our conso
 
 
 // take data from auth and store it inside firestore
-export const createUserDocumentFromAuth = async(userAuth) => {
+export const createUserDocumentFromAuth = async(userAuth, ...otherProps) => {
     // check if user doc is present
+    if(!userAuth)
+        return;
+    
     const userDocRef = doc(db, 'users', userAuth.uid);
     console.log(userDocRef);
 
@@ -68,6 +78,33 @@ export const createUserDocumentFromAuth = async(userAuth) => {
             console.log("Error creating the user", error.message);
         }
     }
-
     return userDocRef;
+}
+
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+
+    return await createUserWithEmailAndPassword(auth, email, password);
+}
+
+
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+
+    // const res = await getAuth(auth);
+    try{
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        const userDocRef = doc(db, "users", userCredential.user.uid);
+        const userDoc = await getDoc(userDocRef);
+        return userDoc;
+    }catch (error) {
+        switch(error.code){
+            case "auth/invalid-credential":
+                alert("Invalid credential entered, check email and password");
+            default:
+                console.error("Error signing in with email and password", error);
+        }  
+    }
 }
