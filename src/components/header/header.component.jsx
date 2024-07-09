@@ -5,8 +5,8 @@ import { ReactComponent as Logo } from './../../assets/4.3 crown.svg';
 import { UserContext } from '../../context/user.context';
 import { signOutUser } from '../../utils/firebase.utils';
 import CartIcon from '../cart-icon/cart-icon.component';
-import CartDropdow from '../cart-dropdown/cart-dropdown.component';
 import { CartContext } from '../../context/cart.context';
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
 
 
@@ -45,11 +45,9 @@ function Header() {
 
                 <CartIcon/>
                 
-                <div style={{
-                    display: `${cartIsOpen ? 'flex' : 'none'}`
-                }}>
-                    <CartDropdow/>
-                </div>
+                <CartDropdown style={{
+                    display: `${cartIsOpen ? 'flex' : 'none'}`}}
+                />
             </div>
 
                 
