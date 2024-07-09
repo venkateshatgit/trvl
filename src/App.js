@@ -1,20 +1,22 @@
 import './App.css';
+import { useState } from 'react';
 import {
-  BrowserRouter,
   createBrowserRouter,
   Outlet,
   RouterProvider
 } from 'react-router-dom';
+
+import { UserProvider } from './context/user.context';
+import { ProductsProvider } from './context/product.context';
+
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shoppage/shoppage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import { Provider } from 'react-redux';
-import store from './redux/store';
-import { useState } from 'react';
+import { CartProvider } from './context/cart.context';
+
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
 
   //creating router
   // OutLet component replaces the childern element 
@@ -44,21 +46,23 @@ function App() {
       ],
       errorElement: (
         <>
-        <Header/>
-        404 Error, Page not found 
+          <Header/>
+          404 Error, Page not found 
         </>
       )
     }
-    
   ]);
 
   return (
-    <Provider store={store}>
-      <div className="App">
-        <RouterProvider router={router} />
-      </div>
-    </Provider>
+    <UserProvider>
+      <ProductsProvider>
+        <CartProvider>
+          <div className="App">
+            <RouterProvider router={router} />
+          </div>
+        </CartProvider>
+      </ProductsProvider>
+    </UserProvider>
   );
 }
-
 export default App;

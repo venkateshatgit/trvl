@@ -1,29 +1,36 @@
 import React from 'react'
 import './sign-in.styles.scss'
+
+
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
+
+
+import { UserContext } from '../../context/user.context';
 
 
 import { 
     auth,
     createUserDocumentFromAuth, 
-    signInWithGooglePopup, 
-    signInWithGoogleRedirect,
+    signInWithGooglePopup,
     signInAuthUserWithEmailAndPassword
  } from '../../utils/firebase.utils';
-import { getRedirectResult } from 'firebase/auth';
+
 
 
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+
+    // To use useContext
+    // const {setCurrUser} = useContext(UserContext);
+
     const logGoogleUser = async () => {
         try{
             const {user} = await signInWithGooglePopup();
             const userDocRef = await createUserDocumentFromAuth(user);
-            console.log(userDocRef)
+            // console.log(userDocRef)
         }catch(error){
             console.log(error.message);
         }
@@ -33,8 +40,13 @@ function SignIn() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // console.log(email, password);
-        const response = await signInAuthUserWithEmailAndPassword(email, password);
-        console.log(response);
+
+        try{
+            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
+        }catch(error){
+            console.log(error.message);
+        }
+
         setEmail('');
         setPassword('');
     }
@@ -68,9 +80,8 @@ function SignIn() {
                     justifyContent: "space-between"
                 }}>
                     <CustomButton type='submit'>Sign In</CustomButton>
-                    <CustomButton buttonType='google-sign-in' onClick={logGoogleUser}>Sign in with Google</CustomButton>
+                    <CustomButton onClick={logGoogleUser} buttonType={"google-sign-in"}>Sign in with Google</CustomButton>
                 </div>
-                
             </form>
         </div>
     )

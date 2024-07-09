@@ -6,7 +6,9 @@ import {
     signInWithPopup, 
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
 } 
 from "firebase/auth";
 import {
@@ -72,7 +74,8 @@ export const createUserDocumentFromAuth = async(userAuth, ...otherProps) => {
             await setDoc(userDocRef, {
                 displayName,
                 email,
-                createdAt
+                createdAt,
+                ...otherProps
             });
         }catch(error){
             console.log("Error creating the user", error.message);
@@ -95,10 +98,11 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
     // const res = await getAuth(auth);
     try{
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-        const userDocRef = doc(db, "users", userCredential.user.uid);
-        const userDoc = await getDoc(userDocRef);
-        return userDoc;
+        // console.log(userCredential)
+        // const userDocRef = doc(db, "users", userCredential.user.uid);
+        // const userDoc = await getDoc(userDocRef);
+        // console.log(userDoc)
+        return userCredential;
     }catch (error) {
         switch(error.code){
             case "auth/invalid-credential":
@@ -107,4 +111,12 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
                 console.error("Error signing in with email and password", error);
         }  
     }
+}
+
+
+export const signOutUser = async () => await signOut(auth);
+
+
+export const onAuthStateChangedListner = (callback) => {
+    onAuthStateChanged(auth, callback);
 }
