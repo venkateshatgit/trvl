@@ -14,6 +14,7 @@ import ShopPage from './pages/shoppage/shoppage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { CartProvider } from './context/cart.context';
+import CheckoutPage from './pages/checkoutpage/checkoutpage.component';
 
 
 function App() {
@@ -42,6 +43,11 @@ function App() {
         {
           path: '/auth',
           element: <SignInAndSignUpPage/>,
+        },
+
+        {
+          path: '/checkout',
+          element: <CheckoutPage/>,
         }
       ],
       errorElement: (
