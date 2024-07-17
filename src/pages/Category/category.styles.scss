@@ -1,0 +1,10 @@
+.category-container{
+    display: flex;
+    flex-direction: column;
+
+    .category-container-products{
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 20px;
+    }
+}

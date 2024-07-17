@@ -15,7 +15,11 @@ import {
     getFirestore,
     doc,
     getDoc,
-    setDoc
+    setDoc,
+    collection,
+    writeBatch,
+    getDocs,
+    query
 } from "firebase/firestore"
 
 
@@ -55,7 +59,7 @@ export const db = getFirestore(); //directly points to database inside our conso
 
 
 // take data from auth and store it inside firestore
-export const createUserDocumentFromAuth = async(userAuth, ...otherProps) => {
+export const createUserDocumentFromAuth = async(userAuth, otherProps) => {
     // check if user doc is present
     if(!userAuth)
         return;
@@ -64,7 +68,7 @@ export const createUserDocumentFromAuth = async(userAuth, ...otherProps) => {
     console.log(userDocRef);
 
     const userSnapShot = await getDoc(userDocRef);
-    console.log(userSnapShot.exists())
+    // console.log(userSnapShot.exists())
 
     if(!userSnapShot.exists()){
         const {displayName, email} = userAuth;
@@ -82,6 +86,35 @@ export const createUserDocumentFromAuth = async(userAuth, ...otherProps) => {
         }
     }
     return userDocRef;
+}
+
+
+export const addCollectionAndDocument = async (collectionKey, objectsToAdd) => {
+    const collectionRef = collection(db, collectionKey);
+    const batch = writeBatch(db);
+
+    objectsToAdd.forEach((object) => {
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+        batch.set(docRef, object);
+    })
+
+    await batch.commit();
+    console.log('done');
+}
+
+
+export const getCategoriesAndDocument = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapShot = await getDocs(q);
+    const categoryMap = querySnapShot.docs.reduce((acc, docSnapshot) => {
+        const {title, items} = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+
+    return categoryMap;
 }
 
 

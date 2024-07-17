@@ -16,7 +16,7 @@ export const UserProvider = ({children}) => {
     useEffect(() => {
         const unsubcribe = onAuthStateChangedListner((user) => {
             setCurrUser(user);
-            console.log(user);
+            // console.log(user);
         })
 
         return unsubcribe;

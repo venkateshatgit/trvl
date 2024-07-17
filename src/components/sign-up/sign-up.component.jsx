@@ -30,6 +30,7 @@ function SignUp() {
         try{
             let response = await createAuthUserWithEmailAndPassword(email, password);
             let {user} = response;
+            // user.displayName = displayName;
             const userDocRef = await createUserDocumentFromAuth(user, {displayName});
 
         }catch(error){

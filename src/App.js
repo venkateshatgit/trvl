@@ -7,14 +7,15 @@ import {
 } from 'react-router-dom';
 
 import { UserProvider } from './context/user.context';
-import { ProductsProvider } from './context/product.context';
+import { CategoriesProvider } from './context/categories.context';
 
 import HomePage from './pages/homepage/homepage.component';
-import ShopPage from './pages/shoppage/shoppage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 import { CartProvider } from './context/cart.context';
 import CheckoutPage from './pages/checkoutpage/checkoutpage.component';
+import CategoriesPreview from './pages/categories-preview/categories-preview.component';
+import Category from './pages/Category/category.component';
 
 
 function App() {
@@ -36,8 +37,22 @@ function App() {
         },
     
         {
-          path: '/shop',
-          element: <ShopPage />
+          element: (
+            <>
+              <Outlet/>
+            </>
+          ),
+          children: [
+            {
+              path: '/shop',
+              element: <CategoriesPreview/>
+            },
+
+            {
+              path: '/shop/:category',
+              element: <Category/>
+            }
+          ]
         },
 
         {
@@ -61,13 +76,13 @@ function App() {
 
   return (
     <UserProvider>
-      <ProductsProvider>
+      <CategoriesProvider>
         <CartProvider>
           <div className="App">
             <RouterProvider router={router} />
           </div>
         </CartProvider>
-      </ProductsProvider>
+      </CategoriesProvider>
     </UserProvider>
   );
 }
