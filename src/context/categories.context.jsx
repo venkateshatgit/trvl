@@ -16,12 +16,9 @@ export const CategoriesProvider = ({children}) => {
             const categoryMap = await getCategoriesAndDocument();
             setCategoriesMap(categoryMap);
         }
-
         getCategoryMap();
-        
     }, [])
     
-
     return(
         <CategoriesConext.Provider value={value}>
             {children}

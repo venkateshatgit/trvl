@@ -46,6 +46,7 @@ function Directory() {
                     imageUrl={item.imageUrl}
                     size={item.size}
                     key={item.id}
+                    route={item.linkUrl}
                 />
             )}
         </div>
