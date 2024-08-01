@@ -6,8 +6,34 @@ export const CartContext = createContext({
     setCartIsOpen: () => {},
     cartItems: [],
     addItemToCart: () => {},
-    removeItemFromCart: () => {}
+    removeItemFromCart: () => {},
+    cartCount: 0,
+    setCartCount: () => {},
+    cartTotal: 0,
+    setCartTotal: () => {}
 });
+
+
+
+const INITIAL_STATE = {
+    cartIsOpen: false,
+    cartItems: [],
+    cartCount: 0,
+    cartTotal: 0
+}
+
+
+// reducer
+const cartReducer = (state, action) => {
+    const {type, payload} = action;
+
+    switch(type){
+
+        default: 
+            return new Error(`Unhandled type of action, received acction: ${type} in cartReducer `);
+    }
+}
+
 
 export const defaultCartItemField = {
     id: '',
@@ -16,6 +42,7 @@ export const defaultCartItemField = {
     price: 0,
     quantity: 1
 }
+
 
 const addCartItem = (cartItems, productToAdd) => {
 
@@ -31,6 +58,7 @@ const addCartItem = (cartItems, productToAdd) => {
     return [...cartItems, {...productToAdd, quantity:1}];
 }
 
+
 const removeCartItem = (cartItems, productToRemove, decrement) => {
 
     if(decrement === 0 || productToRemove.quantity === 1){
@@ -43,16 +71,24 @@ const removeCartItem = (cartItems, productToRemove, decrement) => {
     );
 }
 
+
 export const CartProvider = ({children}) => {
     const [cartIsOpen, setCartIsOpen] = useState(false);
     const [cartItems, setCartItems] = useState([]);
+    const [cartCount, setCartCount] = useState(0);
+    const [cartTotal, setCartTotal] = useState(0);
 
     const addItemToCart = (productToAdd) => {
-        setCartItems(addCartItem(cartItems, productToAdd ));
+        console.log(productToAdd)
+        setCartItems(addCartItem(cartItems, productToAdd));
+        setCartCount(prev => prev + 1);
+        setCartTotal(prev => prev + productToAdd.price);
     }
 
     const removeItemFromCart = (productToRemove, decrement=0) => {
         setCartItems(removeCartItem(cartItems, productToRemove, decrement));
+        setCartCount(prev => prev - 1);
+        setCartTotal(prev => prev - productToRemove.price);
     }
 
     const value = {cartIsOpen, setCartIsOpen, cartItems, addItemToCart, removeItemFromCart};
