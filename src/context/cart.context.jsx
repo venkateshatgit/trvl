@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { type } from "@testing-library/user-event/dist/type";
+import { createContext, useReducer, useState } from "react";
 
 
 export const CartContext = createContext({
@@ -8,9 +9,7 @@ export const CartContext = createContext({
     addItemToCart: () => {},
     removeItemFromCart: () => {},
     cartCount: 0,
-    setCartCount: () => {},
     cartTotal: 0,
-    setCartTotal: () => {}
 });
 
 
@@ -22,12 +21,30 @@ const INITIAL_STATE = {
     cartTotal: 0
 }
 
+export const CART_ACTION_TYPES = {
+    'SET_CART_IS_OPEN': 'SET_CART_IS_OPEN',
+    'SET_CART_ITEMS': 'SET_CART_ITEMS' 
+}
+
 
 // reducer
 const cartReducer = (state, action) => {
     const {type, payload} = action;
 
     switch(type){
+        case CART_ACTION_TYPES.SET_CART_IS_OPEN:
+            return {
+                ...state,
+                cartIsOpen: payload
+            }
+        
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
+            return {
+                ...state,
+                cartCount: payload.newCartCount,
+                cartItems: payload.newCartItems,
+                cartTotal: payload.newCartTotal
+            }
 
         default: 
             return new Error(`Unhandled type of action, received acction: ${type} in cartReducer `);
@@ -61,7 +78,7 @@ const addCartItem = (cartItems, productToAdd) => {
 
 const removeCartItem = (cartItems, productToRemove, decrement) => {
 
-    if(decrement === 0 || productToRemove.quantity === 1){
+    if(decrement === productToRemove.quantity || productToRemove.quantity === 1){
         return cartItems.filter((cartItem) => cartItem.id === productToRemove.id ? false : true);
     }
 
@@ -73,25 +90,41 @@ const removeCartItem = (cartItems, productToRemove, decrement) => {
 
 
 export const CartProvider = ({children}) => {
-    const [cartIsOpen, setCartIsOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
-    const [cartTotal, setCartTotal] = useState(0);
+    const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE);
+    const {cartIsOpen,  cartItems, cartCount, cartTotal} = state;
+
+    const setCartIsOpen = (boolValue) => {
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_IS_OPEN,
+            payload: boolValue
+        });
+    }
+
+    const setCartItems = (newCartItems, newCartCount, newCartTotal) => {
+        dispatch({
+            type: CART_ACTION_TYPES.SET_CART_ITEMS,
+            payload: { newCartItems, newCartCount, newCartTotal }
+        })
+    }
+
 
     const addItemToCart = (productToAdd) => {
-        console.log(productToAdd)
-        setCartItems(addCartItem(cartItems, productToAdd));
-        setCartCount(prev => prev + 1);
-        setCartTotal(prev => prev + productToAdd.price);
+        setCartItems(
+            addCartItem(cartItems, productToAdd), 
+            cartCount+1, 
+            cartTotal+productToAdd.price
+        );
     }
 
-    const removeItemFromCart = (productToRemove, decrement=0) => {
-        setCartItems(removeCartItem(cartItems, productToRemove, decrement));
-        setCartCount(prev => prev - 1);
-        setCartTotal(prev => prev - productToRemove.price);
+    const removeItemFromCart = (productToRemove, decrement=1) => {
+        setCartItems(
+            removeCartItem(cartItems, productToRemove, decrement), 
+            cartCount-decrement,
+            cartTotal-(productToRemove.price*decrement)
+        );
     }
 
-    const value = {cartIsOpen, setCartIsOpen, cartItems, addItemToCart, removeItemFromCart};
+    const value = {cartIsOpen, setCartIsOpen, cartItems, addItemToCart, removeItemFromCart, cartCount, cartTotal};
 
     return(
         <CartContext.Provider value={value}>

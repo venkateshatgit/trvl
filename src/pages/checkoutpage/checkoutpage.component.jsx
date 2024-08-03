@@ -6,7 +6,7 @@ import React, { useContext } from 'react'
 
 function CheckoutPage() {
 
-    const {cartItems, addItemToCart, removeItemFromCart} = useContext(CartContext);
+    const {cartItems, cartTotal} = useContext(CartContext);
 
     return (
         <div className='checkout-container'>
@@ -32,7 +32,7 @@ function CheckoutPage() {
                     <CheckoutItems key={item.id} item={item}/>
                 )
             })}
-            <span className='total'>Total: {cartItems.reduce((acc, cartItem) => acc + (cartItem.price * cartItem.quantity), 0)}</span>
+            <span className='total'>Total: {cartTotal}</span>
         </div>
     )
 }

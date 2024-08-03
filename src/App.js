@@ -1,5 +1,4 @@
 import './App.css';
-import { useState } from 'react';
 import {
   createBrowserRouter,
   Outlet,
@@ -7,12 +6,12 @@ import {
 } from 'react-router-dom';
 
 import { UserProvider } from './context/user.context';
+import { CartProvider } from './context/cart.context';
 import { CategoriesProvider } from './context/categories.context';
 
 import HomePage from './pages/homepage/homepage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
-import { CartProvider } from './context/cart.context';
 import CheckoutPage from './pages/checkoutpage/checkoutpage.component';
 import CategoriesPreview from './pages/categories-preview/categories-preview.component';
 import Category from './pages/Category/category.component';
