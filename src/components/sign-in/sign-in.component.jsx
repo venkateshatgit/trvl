@@ -4,10 +4,8 @@ import './sign-in.styles.scss'
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 
-
-import { UserContext } from '../../context/user.context';
 
 
 import { 

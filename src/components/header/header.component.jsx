@@ -1,23 +1,23 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import './header.styles.scss'
 import { Link } from 'react-router-dom'
 import { ReactComponent as Logo } from './../../assets/4.3 crown.svg';
-import { UserContext } from '../../context/user.context';
 import { signOutUser } from '../../utils/firebase.utils';
 import CartIcon from '../cart-icon/cart-icon.component';
-import { CartContext } from '../../context/cart.context';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrUser } from '../../store/user/user.action';
 
 
 
 function Header() {
-
-    const {currUser, setCurrUser} = useContext(UserContext);
-    const {cartIsOpen} = useContext(CartContext);
+    const currUser = useSelector((state) => state.user.currUser);
+    const {cartIsOpen} = useSelector((state) => state.cart);
+    const dispatch = useDispatch();
 
     const signOutHandler = async () => {
         await signOutUser();
-        setCurrUser(null);
+        dispatch(setCurrUser(null));
     }
 
     return (

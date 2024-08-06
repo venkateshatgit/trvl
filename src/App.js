@@ -5,10 +5,6 @@ import {
   RouterProvider
 } from 'react-router-dom';
 
-import { UserProvider } from './context/user.context';
-import { CartProvider } from './context/cart.context';
-import { CategoriesProvider } from './context/categories.context';
-
 import HomePage from './pages/homepage/homepage.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
@@ -16,8 +12,19 @@ import CheckoutPage from './pages/checkoutpage/checkoutpage.component';
 import CategoriesPreview from './pages/categories-preview/categories-preview.component';
 import Category from './pages/Category/category.component';
 
+import { useEffect} from "react";
+import { onAuthStateChangedListner } from "./utils/firebase.utils";
+import { setCurrUser } from './store/user/user.action';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubcribe = onAuthStateChangedListner((user) => {
+        dispatch(setCurrUser(user));
+    })
+  }, [])
 
   //creating router
   // OutLet component replaces the childern element 
@@ -74,15 +81,9 @@ function App() {
   ]);
 
   return (
-    <UserProvider>
-      <CategoriesProvider>
-        <CartProvider>
           <div className="App">
             <RouterProvider router={router} />
           </div>
-        </CartProvider>
-      </CategoriesProvider>
-    </UserProvider>
   );
 }
 export default App;

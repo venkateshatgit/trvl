@@ -1,9 +1,8 @@
-import { UserContext } from '../../context/user.context';
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase.utils';
 import CustomButton from '../custom-button/custom-button.component';
 import FormInput from '../form-input/form-input.component';
 import './sign-up.styles.scss';
-import React, { useContext, useState } from 'react'
+import React, {useState } from 'react'
 
 
 const defaultFormFields = {
