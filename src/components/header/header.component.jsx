@@ -6,7 +6,7 @@ import { signOutUser } from '../../utils/firebase.utils';
 import CartIcon from '../cart-icon/cart-icon.component';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrUser } from '../../store/user/user.action';
+import { setCurrUser } from '../../store/user/user.slice';
 
 
 

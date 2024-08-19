@@ -3,6 +3,7 @@ import CheckoutItems from '../../components/checkout-items/checkout-items.compon
 import './checkoutpage.styles.scss';
 
 import React, { useContext } from 'react'
+import PaymentForm from '../../components/payment-form/payment-form.component';
 
 function CheckoutPage() {
     const {cartItems, cartTotal} = useSelector((state) => state.cart);
@@ -28,10 +29,11 @@ function CheckoutPage() {
             </div>
             {cartItems.map(item => {
                 return (
-                    <CheckoutItems key={item.id} item={item}/>
+                    <CheckoutItems key={item.id} product={item}/>
                 )
             })}
             <span className='total'>Total: {cartTotal}</span>
+            <PaymentForm/>
         </div>
     )
 }

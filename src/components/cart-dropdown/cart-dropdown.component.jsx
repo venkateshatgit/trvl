@@ -4,7 +4,7 @@ import CustomButton from '../custom-button/custom-button.component'
 import CartItem from '../cart-item/cart-item.component'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCartIsOpen } from '../../store/cart/cart.action';
+import { setCartIsOpen } from '../../store/cart/cart.slice';
 
 function CartDropdown({...otherProps}) {
 
@@ -16,6 +16,7 @@ function CartDropdown({...otherProps}) {
 
     const goToCheckout = () => {
         navigate("/checkout");
+        console.log(setCartIsOpen)
         dispatch(setCartIsOpen(false))
     }
 

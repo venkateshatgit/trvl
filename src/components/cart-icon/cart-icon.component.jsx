@@ -3,10 +3,10 @@ import {ReactComponent as ShopingIcon } from '../../assets/shopping-bag.svg';
 
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { setCartIsOpen } from '../../store/cart/cart.action';
+import { setCartIsOpen } from '../../store/cart/cart.slice';
 
 function CartIcon() {
-    const {cartIsOpen, cartItems, cartCount} = useSelector((state) => state.cart);
+    const {cartIsOpen, cartCount} = useSelector((state) => state.cart);
     const dispatch = useDispatch();
 
     return (

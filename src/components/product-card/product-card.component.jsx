@@ -1,7 +1,7 @@
 import React from 'react'
 import './product-card.styles.scss';
 import CustomButton from '../custom-button/custom-button.component'
-import { addItemToCart } from '../../store/cart/cart.action';
+import { addItemToCart } from '../../store/cart/cart.slice';
 import { useDispatch, useSelector } from 'react-redux';
 
 function ProductCard({product}) {
@@ -16,7 +16,7 @@ function ProductCard({product}) {
                 <span className="name">{name}</span>
                 <span className="price">{price}</span>
             </div>
-            <CustomButton buttonType='inverted' onClick={() => dispatch(addItemToCart(cartItems, cartCount, cartTotal, product))}>Add to crat</CustomButton>
+            <CustomButton buttonType='inverted' onClick={() => dispatch(addItemToCart({cartItems, cartCount, cartTotal, product}))}>Add to crat</CustomButton>
         </div>
     )
 }

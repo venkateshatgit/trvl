@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import './directory.styles.scss'
 import MenuItem from "../menu-item/menu-item.component";
 import { getCategoriesAndDocument } from "../../utils/firebase.utils";
-import { setCategoriesMap } from "../../store/categories/categories.action";
 import { useDispatch } from "react-redux";
 
 function Directory() {
@@ -40,16 +39,6 @@ function Directory() {
             linkUrl: 'shop/mens'
         }
     ])
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        const getCategoryMap = async() => {
-          const categoryMap = await getCategoriesAndDocument();
-          dispatch(setCategoriesMap(categoryMap));
-        }
-        getCategoryMap();
-    }, [])
 
     return (
         <div className="directory-menu">

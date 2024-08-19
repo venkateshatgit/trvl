@@ -13,9 +13,10 @@ import CategoriesPreview from './pages/categories-preview/categories-preview.com
 import Category from './pages/Category/category.component';
 
 import { useEffect} from "react";
-import { onAuthStateChangedListner } from "./utils/firebase.utils";
-import { setCurrUser } from './store/user/user.action';
+import { getCategoriesAndDocument, onAuthStateChangedListner } from "./utils/firebase.utils";
+import { setCurrUser } from './store/user/user.slice';
 import { useDispatch } from 'react-redux';
+import { setCategoriesMap } from './store/categories/categories.slice';
 
 function App() {
   const dispatch = useDispatch();
@@ -24,7 +25,14 @@ function App() {
     const unsubcribe = onAuthStateChangedListner((user) => {
         dispatch(setCurrUser(user));
     })
+
+    const getCategoryMap = async() => {
+      const categoryMap = await getCategoriesAndDocument();
+      dispatch(setCategoriesMap(categoryMap));
+    }
+    getCategoryMap();
   }, [])
+
 
   //creating router
   // OutLet component replaces the childern element 
